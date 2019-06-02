@@ -1,0 +1,344 @@
+//Mr Jesse Byers
+//3162857
+//SENG1120 - Assignment 2
+//LinkedList.template
+
+#include "LinkedList.h"
+
+#include <cstdlib> //NULL
+#include <iostream>
+using namespace std;
+
+/*//OVERLOADED OPERATORS
+template <typename data_type>
+ostream& operator << (ostream& outs, const LinkedList<data_type>& input) 
+{
+	Node<data_type>* current = input.getTail();
+
+
+	while (current != NULL) {
+		outs << current->getData() << " ";
+		current = current->getPrevious();
+
+	}  
+
+	return outs;
+
+}
+
+template <typename data_type>
+void LinkedList<data_type>::operator += (const LinkedList& rhs)
+{	
+
+	Node<data_type>* current = rhs.getTail();
+
+	while (current != NULL){
+
+		addToHead(current->getData());
+
+		current = current->getPrevious();
+	}
+
+
+}*/
+
+/////////////////////CONSTRUCTOR/DESTRUCTOR/////////////////////////////////
+
+template <typename data_type>
+LinkedList<data_type>::LinkedList(){
+
+	head = NULL;
+	tail = NULL;
+	current = NULL;
+	list_length = 0;
+
+}
+
+template <typename data_type>
+LinkedList<data_type>::LinkedList(const data_type& data){ 
+
+	int stringLength = 0;
+	int spaceIndex = 0;
+
+	data_type* inputString = new data_type;
+	*inputString = data;
+
+	data_type* tempString = new data_type;
+
+	stringLength  = inputString->length();
+
+//list fill out		
+spaceIndex = inputString->find(" ", 0); // first space index location
+*tempString = inputString->substr (0,spaceIndex); //seperate the word
+
+head = new Node<data_type>(*tempString);
+tail = head;
+current = tail;
+list_length = 1;
+
+*inputString = inputString->substr(spaceIndex + 1, stringLength); //adjust word by starting at space index
+stringLength  = inputString->length(); //set length
+
+
+
+//resize 
+while (stringLength > 0 && spaceIndex != -1){
+
+
+spaceIndex = inputString->find(" ", 0); // first space index location
+
+*tempString = inputString->substr (0,spaceIndex); //seperate the word
+
+addToHead(*tempString); // add the word to the list
+
+*inputString = inputString->substr(spaceIndex + 1, stringLength); //adjust word by starting at space index
+
+stringLength  = inputString->length(); //set length
+
+
+} 
+
+spaceIndex = 0; //reset
+
+
+}
+
+template <typename data_type>
+LinkedList<data_type>::~LinkedList(){ //Destructor
+
+	while(head != NULL){
+		removeHead();
+		tail = NULL;
+
+	}
+
+}
+
+/////////////////////GET FUNCTIONS//////////////////////////////////
+
+template <typename data_type>
+data_type& LinkedList<data_type>::getTail() const{
+
+	return tail->getData();
+}
+
+
+template <typename data_type>
+data_type& LinkedList<data_type>::getHead() const{
+
+	return head->getData();
+}
+
+
+/////////////////////MUTATOR FUNCTIONS//////////////////////////////////
+
+template <typename data_type>
+void LinkedList<data_type>::addToHead(const data_type& data){
+
+
+	if (list_length==0){
+
+		head = new Node<data_type>(data);
+		tail = head;
+		current = tail;
+		list_length = 1;
+
+	} else {
+
+		Node<data_type>* headinsert = new Node<data_type>(data);
+		head->setPrevious(headinsert);
+		headinsert->setNext(head);
+		head = headinsert;
+		list_length++;
+		headinsert = NULL;
+
+
+	}
+
+}
+
+template <typename data_type>
+void LinkedList<data_type>::addToTail(const data_type& data){
+
+	if (list_length==0){
+
+		head = new Node<data_type>(data);
+		tail = head;
+		current = tail;
+		list_length = 1;
+
+	} else {
+
+		Node<data_type>* tailinsert = new Node<data_type>(data);
+
+		tail->setNext(tailinsert);
+		tailinsert->setPrevious(tail);
+		tail = tailinsert;
+		list_length++;
+		tailinsert = NULL;
+
+
+	}
+
+
+}
+
+////////////////////////REMOVE FUNCTIONS///////////////////////////////////
+template <typename data_type>
+void LinkedList<data_type>::removeHead(){
+
+	if (list_length==0){
+
+
+
+
+	} 	else if (list_length==1){
+
+		delete head;
+		head = NULL;
+		tail = NULL;
+		list_length=0;
+
+
+	} else {
+
+		Node<data_type>* temphead = head;
+
+		head = temphead->getNext();	
+		head->setPrevious(NULL);
+
+		temphead = NULL;
+		delete temphead;
+		list_length--;
+
+
+
+	}
+
+}
+
+template <typename data_type>
+void LinkedList<data_type>::removeTail(){
+
+	if (list_length==0){
+
+
+	} 	else if (list_length==1){
+
+		delete head;
+		head = NULL;
+		tail = NULL;
+		list_length--;
+
+	} else {
+
+		Node<data_type>* temptail = tail;
+		tail = temptail->getPrevious();
+
+		temptail = NULL;
+		delete temptail;
+		list_length--;
+
+
+
+
+	}
+
+
+}
+
+
+template <typename data_type>
+void LinkedList<data_type>::remove(const data_type& input){ //removes a specific word in the list
+
+bool msgcount = 0; //0 is not found, 1 is found
+
+
+if (input == tail->getData()){
+
+	removeTail();
+	msgcount = 1;
+} 
+
+if (input == head->getData()) {
+
+	removeHead();
+	msgcount = 1;
+} 
+
+
+for (current = head->getNext(); current != tail; current = current->getNext()){
+
+	if (input == current->getData() && input != head->getData() && input != tail->getData()){
+
+		Node<data_type>* temp;
+		temp = current->getPrevious();
+		temp->setNext(current->getNext());
+		temp = current->getNext();
+		temp->setPrevious(current->getPrevious());
+		delete current;
+		current = temp;
+		list_length--;
+		msgcount = 1;
+
+
+	} 
+}
+
+
+
+if (msgcount == 0) {
+	cout << "NOTICE: Word was not found in LinkedList" << endl;
+
+}
+
+}
+
+///////////////////////CURRENT FUNCTIONS//////////////////////////////////////
+template <typename data_type>
+data_type LinkedList<data_type>::getCurrent() const{
+
+	return current->getData();
+
+
+}
+
+template <typename data_type>
+void LinkedList<data_type>::currentForward(){
+
+	current = current->getNext();
+
+}
+
+template <typename data_type>
+void LinkedList<data_type>::currentBack(){
+
+	current = current->getPrevious();
+
+}
+
+template <typename data_type>
+void LinkedList<data_type>::currentMoveToHead(){
+
+	current = head;
+
+}
+
+template <typename data_type>
+void LinkedList<data_type>::currentMoveToTail(){
+
+	current = tail;
+
+}
+
+
+///////////////////////SIZE FUNCTIONS//////////////////////////////////////
+template <typename data_type>
+std::size_t LinkedList<data_type>::size() const{
+
+	return list_length;
+}
+
+
+
+

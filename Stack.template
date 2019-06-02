@@ -1,0 +1,122 @@
+//Mr Jesse Byers
+//3162857
+//SENG1120 - Assignment 2
+//Stack.template
+
+#include <cstdlib> //NULL
+#include <iostream>
+#include "Stack.h"
+
+using namespace std;
+
+//OVERLOADED OPERATOR
+template <typename data_type>
+ostream& operator << (ostream& out, Stack<data_type>& ss){
+
+	int i;
+	Stack<int> tempstack;
+
+	out << "( " ;
+
+	for (i=ss.size(); i > 0; i--) {
+
+
+	tempstack.push(ss.top());
+	ss.pop();
+
+	}
+
+	for (i=tempstack.size(); i > 0; i--) {
+
+	ss.push(tempstack.top());
+	tempstack.pop();
+
+	out << ss.top();
+
+	out << " ";
+
+		}
+
+
+	out << ")" << endl;
+	return out;
+
+
+}
+
+
+//CONSTRUCTOR
+	template <typename data_type>
+Stack<data_type>::Stack(){ 
+
+	list = new LinkedList<data_type>();
+	used = 0;
+
+}
+
+
+	template <typename data_type>
+Stack<data_type>::Stack(const data_type& data){
+
+	list = new LinkedList<data_type>(data);
+	used = 1;
+
+}
+
+
+	//DESTRUCTOR
+	template <typename data_type>
+Stack<data_type>::~Stack(){
+
+	list->~LinkedList();
+	delete list;
+	used = 0;
+
+}
+
+	//adds to the head of the list
+	template <typename data_type>
+void Stack<data_type>::push(const data_type& entry){
+
+	list->addToHead(entry); 
+}
+
+	//removes the head of the list
+	template <typename data_type>
+	void Stack<data_type>::pop(){
+
+	list->removeHead(); 
+	
+
+}
+
+	//returns the size of the list
+	template <typename data_type>
+int Stack<data_type>::size() const{
+
+	return list->size();
+
+}
+
+	//returns if the list is empty or not
+	template <typename data_type>
+bool Stack<data_type>::is_empty() const{
+
+	if (used == 0){
+
+		return true;
+
+	} else {
+
+		return false;
+	}
+
+}
+
+	//returns the head of the lists data
+	template <typename data_type>
+data_type& Stack<data_type>::top() const{
+
+	return list->getHead(); 
+
+}

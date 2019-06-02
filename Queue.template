@@ -1,0 +1,116 @@
+//Mr Jesse Byers
+//3162857
+//SENG1120 - Assignment 2
+//Queue.template
+
+#include <iostream>
+#include <cstdlib> //NULL
+
+
+using namespace std;
+
+
+//CONSTRUCTORS
+	template <typename data_type>
+Queue<data_type>::Queue(){
+	
+	list = new LinkedList<data_type>();
+	used = 0;
+		total = 0.0; //double
+	}
+	
+	
+	template <typename data_type>
+	Queue<data_type>::Queue(const data_type& data){
+		list = new LinkedList<data_type>(data);
+		used = 0;
+		total = 0.0; //double
+	}
+
+//DESTRUCTOR
+	template <typename data_type>
+	Queue<data_type>::~Queue(){
+
+		list->~LinkedList();
+		delete list;
+
+	}
+
+
+
+
+//Below calculates the average of the queue
+	template <typename data_type>
+	double Queue<data_type>::average(){
+		
+		double average = 0.0;
+		average = total/list->size(); 
+
+		return average;
+	}
+	
+	//adds to the head of the list
+	template <typename data_type>
+	void Queue<data_type>::enqueue(const data_type& data){
+		
+		list->addToHead(data);
+		used ++;
+		
+	}
+	
+	//removes head of the list
+	template <typename data_type>
+	void Queue<data_type>::dequeue(){
+
+		list->removeFromHead();
+		used --;
+		
+	}
+	
+	//returns size
+	template <typename data_type>
+	Queue<data_type>::size() const{
+
+		return used;
+		
+	}
+	
+	//returns if the list is empty or not
+	template <typename data_type>
+	bool Queue<data_type>::isEmpty() const{
+		
+		if (used == 0){
+			return 1;
+		} else {
+			return 0;
+		}
+		
+		
+	}
+	
+	
+	//returns the head of the list
+	template <typename data_type>
+	data_type& Queue<data_type>::front() const{
+		
+		
+		return list->getHead();
+		
+		
+	}
+
+	//adds to the head of the list
+	template <typename data_type>
+	void Queue<data_type>::push(const data_type& entry){
+
+		list->addToHead(entry);
+		total = total + entry; //for average calculation
+	}
+
+	//removes the head of the list
+	template <typename data_type>
+	void Queue<data_type>::pop(){
+
+		list->removeHead(); 
+	}
+	

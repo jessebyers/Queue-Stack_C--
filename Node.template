@@ -1,0 +1,77 @@
+//Mr Jesse Byers
+//3162857
+//SENG1120 - Assignment 2
+//Node.template
+
+
+#include <cstdlib> //NULL
+#include <iostream>
+#include "Node.h"
+
+using namespace std;
+
+//CONSTRUCTOR
+	template <typename data_type>
+Node<data_type>::Node(const data_type& initdata){
+
+	data = initdata;
+	next = NULL;
+	previous = NULL;
+}
+	template <typename data_type>
+Node<data_type>::Node(){
+	data = data_type();
+	next = NULL;
+	previous = NULL;
+
+}
+
+//DESTRUCTOR
+	template <typename data_type>
+Node<data_type>::~Node(){
+	
+	next = NULL;
+	previous = NULL;
+
+}
+
+//GETS
+	template <typename data_type>
+data_type Node<data_type>::getData() const{ 
+	return data;
+}
+
+	template <typename data_type>
+data_type& Node<data_type>::getData(){ 
+	return data;
+}
+
+
+	template <typename data_type>
+Node<data_type>* Node<data_type>::getNext() const{
+	return next;
+}
+
+
+	template <typename data_type>
+Node<data_type>* Node<data_type>::getPrevious() const{
+	return previous;
+}
+
+//SETS
+	template <typename data_type>
+void Node<data_type>::setData(const data_type& newData){
+	data = newData;
+}
+
+
+	template <typename data_type>
+void Node<data_type>::setNext(Node* nextLink){
+	next = nextLink;
+}
+
+
+	template <typename data_type>
+void Node<data_type>::setPrevious(Node* previousLink){
+	previous = previousLink;
+}
